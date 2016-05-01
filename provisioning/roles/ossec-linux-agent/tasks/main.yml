@@ -1,3 +1,2 @@
 ---
 - include: dep_install.yml
-- include: ossec.yml
