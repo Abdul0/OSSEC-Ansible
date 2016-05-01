@@ -23,5 +23,13 @@
 - set_fact: ossec_repo="C:\Program Files (x86)\ossec-agent"
   when: ansible_architecture == "64-bit" or ansible_architecture == "x86_64"
 
+- name: Deploy ossec.conf on windows hosts
+  template: src=../templates/ossec.conf.j2 dest={{ ossec_repo }}\ossec.conf backup=yes
+
+- name: Copy client.keys file
+  win_copy: src=roles/ossec-windows-agent/files/keys/client_{{ inventory_hostname }}.keys dest={{ ossec_repo }}\client.keys
+
+- name: Start ossec-agent
+  raw: cmd /c "net start Ossecsvc" 
   #raw: cmd /c powershell start-process -windowstyle hidden "C:\ossec-agent\ossec-agent.exe" -ArgumentList 'start'
   #script: "roles/ossec-windows-agent/files/start_ossec_windows.ps1"
